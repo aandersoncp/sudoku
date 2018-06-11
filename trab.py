@@ -59,70 +59,35 @@ def layout():
 	print("  ++---+---+---++---+---+---++---+---+---++")
 	print('\n')
 
-vq = 1 #variável de validade dos quadrantes
-def quad():#Verificador dos quadrantes
-	#Quadrantes
-	q1 = []
+def testequad(): #função para teste de numeros iguais em um mesmo quadrante
+	#separação da matriz sudoku em quadrantes
+	q1 = [sudoku[0][0], sudoku[0][1], sudoku[0][2], sudoku[1][0], sudoku[1][1], sudoku[1][2], sudoku[2][0], sudoku[2][1], sudoku[2][2]]
+	q2 = [sudoku[0][3], sudoku[0][4], sudoku[0][5], sudoku[1][3], sudoku[1][4], sudoku[1][5], sudoku[2][3], sudoku[2][4], sudoku[2][5]]
+	q3 = [sudoku[0][6], sudoku[0][7], sudoku[0][8], sudoku[1][6], sudoku[1][7], sudoku[1][8], sudoku[2][6], sudoku[2][7], sudoku[2][8]]
+	q4 = [sudoku[3][0], sudoku[3][1], sudoku[3][2], sudoku[4][0], sudoku[4][1], sudoku[4][2], sudoku[5][0], sudoku[5][1], sudoku[5][2]]
+	q5 = [sudoku[3][3], sudoku[3][4], sudoku[3][5], sudoku[4][3], sudoku[4][4], sudoku[4][5], sudoku[5][3], sudoku[5][4], sudoku[5][5]]
+	q6 = [sudoku[3][6], sudoku[3][7], sudoku[3][8], sudoku[4][6], sudoku[4][7], sudoku[4][8], sudoku[5][6], sudoku[5][7], sudoku[5][8]]
+	q7 = [sudoku[6][0], sudoku[6][1], sudoku[6][2], sudoku[7][0], sudoku[7][1], sudoku[7][2], sudoku[8][0], sudoku[8][1], sudoku[8][2]]
+	q8 = [sudoku[6][3], sudoku[6][4], sudoku[6][5], sudoku[7][3], sudoku[7][4], sudoku[7][5], sudoku[8][3], sudoku[8][4], sudoku[8][5]]
+	q9 = [sudoku[6][6], sudoku[6][7], sudoku[6][8], sudoku[7][6], sudoku[7][7], sudoku[7][8], sudoku[8][6], sudoku[8][7], sudoku[8][8]]
+	quadrante = [q1, q2, q3, q4, q5, q6, q7, q8, q9] #matriz com os quadrantes da matriz sudoku
 	i = 0
-	for i in range(0, 3):
-	    q1.append(sudoku[i][:3])
-	q2 = []
-	i = 0
-	for i in range(0, 3):
-	    q2.append(sudoku[i][3:6])
-	q3 = []
-	i = 0
-	for i in range(0, 3):
-	    q3.append(sudoku[i][6:])
-	q4 = []
-	i = 0
-	for i in range(3, 6):
-	    q4.append(sudoku[i][:3])
-	q5 = []
-	i = 0
-	for i in range(3, 6):
-	    q5.append(sudoku[i][3:6])
-	q6 = []
-	i = 0
-	for i in range(3, 6):
-	    q6.append(sudoku[i][6:])
-	q7 = []
-	i = 0
-	for i in range(6, 9):
-	    q7.append(sudoku[i][:3])
-	q8 = []
-	i = 0
-	for i in range(6, 9):
-	    q8.append(sudoku[i][3:6])
-	q9 = []
-	i = 0
-	for i in range(6, 9):
-	    q9.append(sudoku[i][6:])
-	quadrante = [q1, q2, q3, q4, q5, q6, q7, q8, q9]
-	vq = 1 #variável de validade
-	i = 0 #linha
-	j = 0 #coluna
-	k = 0 #contador
-	for i in range(0, 9):
-		for j in range(0, 3):
-			for k in range(1, 10):
-				x = int(quadrante[i][j].count(k))
-				if x > 1:
-					print("HA VALORES IGUAIS EM UM MESMO QUADRANTE!")
-					vq = 0
+	x = 0
+	k = 1
+	while x < 1 and i < 9:
+		k = 1
+		while x < 1 and k < 10:
+			x = int(quadrante[i].count(k))
+			k = k + 1
+			if x > 1:
+				print("HA VALORES IGUAIS EM UM MESMO QUADRANTE!")
+				return False
+			else:
+				return True
+		i = i + 1	
+
 
 layout() #mostra status do sudoku com as dicas do arquivo pela primeira vez
-
-#Verificador de entradas do usuário
-"""while contador < len(dicas)-1:
-	dicas[contador] = dicas[contador].split()
-	dicas[contador] = "".join(dicas[contador])
-	v = dicas[contador].find(',')
-	p = dicas[contador].find(':')
-	if len(dicas[contador]) != 5 or v !=1 or p !=3 or int(dicas[contador][2]) == 0 or int(dicas[contador][4]) ==0:
-		dicas[contador] = 0
-	print(dicas[contador])
-	contador = contador + 1"""
 
 loop = 1 #variável para quebra de loop 
 verdicas = 0 #variável para garantia de que dicas serão verificadas uma única vez dentro do loop
@@ -142,8 +107,8 @@ while loop != 0:
 		else:
 			verdicas = 1
 		
-		quad() #chama a função que verifica se há número iguais nos quadrantes
-		if vq == 0:
+		
+		if not testequad():
 			valido = 0
 
 		if valido==0:
@@ -175,10 +140,10 @@ while loop != 0:
 				if coluna==int(dicas[k][0]) and linha==int(dicas[k][2])-1:
 					print("DICAS NAO PODEM SER ALTERADAS!")
 					valido2 = 0
-			quad() #chama a função que verifica se há número iguais nos quadrantes
-			if vq == 0:
-				valido = 0
-
+			
+			if not testequad():
+				valido2 = 0
+	
 		if valido2 == 0:
 			print("JOGADA INVALIDA!")
 			loop = 0 #APENAS PARA FINS DE TESTE!
@@ -186,21 +151,4 @@ while loop != 0:
 			sudoku[linha][coluna] = numero
 			print('\n'*130)
 			layout()
-
-
-
-				
-#validador de numero na posição
-'''def posicao_valido(sudoku,i,j,num):
-  linha_valida=all([num != sudoku[i][x]for x in range(9)])
-  if linha_valida:
-    coluna_valida=all([num != sudoku[x][j]for x in range(9)])
-    if coluna_valida:
-      linhaX, colunaY = 3*(i//3),3*(j//3)
-      for x in range (linhaX,linhaX+3):
-        for y in range (colunaY,colunaY+3):
-          if sudoku[x][y] == num:
-            return False
-      return True
-  return False'''
 
