@@ -5,7 +5,7 @@ EDUARDO ALCANTARA DE ALENCAR PINTO - 428945
 GUSTAVO SANTOS MARQUES DE FREITAS - 414665
 '''
 
-#Abrindo arquivo com dicas
+#Abrindo e configurando arquivo com dicas
 arquivo = open('texto.txt')
 dicas = arquivo.read()
 dicas = dicas.split('\n')
@@ -37,7 +37,7 @@ while contador < len(dicas)-1:
 #Função para exibir status do sudoku
 def layout():
 	print('\n')
-	print ("     A   B   C   D   E   F   G   H   I")
+	print ("     A   B   C    D   E   F    G   H   I")
 	print("  ++---+---+---++---+---+---++---+---+---++")
 	print("1 || "+str(sudoku[0][0])+" | "+str(sudoku[0][1])+" | "+str(sudoku[0][2])+" || "+str(sudoku[0][3])+" | "+str(sudoku[0][4])+" | "+str(sudoku[0][5])+" || "+str(sudoku[0][6])+" | "+str(sudoku[0][7])+" | "+str(sudoku[0][8])+" ||")
 	print("  ++---+---+---++---+---+---++---+---+---++")
@@ -72,8 +72,8 @@ def testequad(): #função para teste de numeros iguais em um mesmo quadrante
 	q9 = [sudoku[6][6], sudoku[6][7], sudoku[6][8], sudoku[7][6], sudoku[7][7], sudoku[7][8], sudoku[8][6], sudoku[8][7], sudoku[8][8]]
 	quadrante = [q1, q2, q3, q4, q5, q6, q7, q8, q9] #matriz com os quadrantes da matriz sudoku
 	i = 0
-	x = 0
-	k = 1
+	x = 0 #contadores
+	k = 1 #variável (1 a 9) para compração de respostas
 	while x < 1 and i < 9:
 		k = 1
 		while x < 1 and k < 10:
@@ -86,6 +86,7 @@ def testequad(): #função para teste de numeros iguais em um mesmo quadrante
 				return True
 		i = i + 1	
 
+caracts = ["A","B","C","D","E","F","G","H","I","a","b","c","d","e","f","g","h","i"] #lista com caracteres aceitáveis
 
 layout() #mostra status do sudoku com as dicas do arquivo pela primeira vez
 
@@ -94,6 +95,20 @@ verdicas = 0 #variável para garantia de que dicas serão verificadas uma única
 while loop != 0:
 	valido = 1 #variável para verificar validade das dicas
 	valido2 = 1 #variável para verificar validade das entradas
+	i = 0 #contadores
+	j = 0
+	gg = 0 #numero de jogadas preenchidas
+	delecao = 0
+	while i<9 and sudoku[i][j] != ' ': #verifica se ainda já jogadas não preenchidas
+		while j<9 and sudoku[i][j] != ' ':
+			gg = gg + 1
+			j = j + 1
+		i = i + 1
+		j = 0	
+	if gg > 80:
+		print("ACERTOU MIZERAVI!")
+		loop = 0
+
 	if verdicas == 0:
 		#verificação da validade das dicas
 		if len(dicas)-1>80:
@@ -116,14 +131,54 @@ while loop != 0:
 			loop = 0
 	if loop!=0:
 		jogada = input("DIGITE SUA JOGADA:")
-		jogada = jogada.split()
+		jogada = jogada.split() #verifica a formatação da jogada:
 		jogada = "".join(jogada)
 		v = jogada.find(',')
 		p = jogada.find(':')
-		#verifica a formatação da jogada
-		if len(jogada) != 5 or v !=1 or p !=3 or int(jogada[2]) == 0 or int(jogada[4]) == 0:
-			print("FORMATO NÃO COMPREENDIDO!")
+		vc = False #valicação da letra da jogada
+		contador = 0
+		while not vc and contador < 18: #testa se coluna tem caractere permitido
+			if jogada[0] == caracts[contador]:
+				vc = True
+			contador = contador + 1
+		if (len(jogada) != 5 or v !=1 or p !=3 or int(jogada[2]) == 0 or int(jogada[4]) == 0 or not vc) and len(jogada)!=4:
+			print("FORMATO DA JOGADA NÃO COMPREENDIDO!")
 			valido2 = 0
+		
+		elif len(jogada)==4 and (jogada[0]=="D" or jogada[0]=="d"): #testa se é uma jogada de deleção
+			vc = False #valicação da letra da jogada (coluna)
+			vl = False #valicação do numero da jogada (linha)
+			contador = 0
+			while not vc and contador < 18: #testa se coluna tem caractere permitido
+				if jogada[1] == caracts[contador]:
+					vc = True
+				contador = contador + 1
+			contador = 1
+			while contador < 10 and not vl: #testa de linha tem caractere de numero permitido
+				if int(jogada[3]) == contador:
+					vl = True
+				contador = contador + 1
+			if not vc or not vl: #testa se é uma jogada de deleção no formato correto
+				print("FORMATO DE JOGADA DE DELECAO NÃO COMPREENDIDO!")
+				valido2 = 0
+			else:
+				vd = False #variável para verificação de dica
+				contador = 0
+				while not vd and contador < len(dicas) - 1: #testa se jogada tenta deletar uma dica
+					if str(dic[jogada[1]]) == str(dicas[contador][0]) and str(jogada[3]) == str(dicas[contador][2]):
+						vd = True
+					contador = contador + 1
+				if vd:
+					print("DICAS NÃO PODEM SER DELETADAS!")
+					valido2 = 0
+				else: #deletando a jogada
+					l = int(jogada[3]) - 1
+					c = int(dic[jogada[1]])
+					sudoku[l][c] = ' '
+					print('\n'*130)
+					layout()
+					print("JOGADA DELETADA!")
+					delecao = 1 #variável para impedir outras ações do programa
 		else:
 			coluna = int(dic[jogada[0]])
 			linha = int(jogada[2])-1
@@ -147,8 +202,15 @@ while loop != 0:
 		if valido2 == 0:
 			print("JOGADA INVALIDA!")
 			loop = 0 #APENAS PARA FINS DE TESTE!
-		elif valido2 == 1:
+		elif valido2 == 1 and delecao == 0:
+			numeroant = sudoku[linha][coluna]
 			sudoku[linha][coluna] = numero
 			print('\n'*130)
 			layout()
-
+		if not testequad() and delecao == 0:
+			sudoku[linha][coluna] = numeroant
+			print('\n'*130)
+			layout()
+			print("HA VALORES IGUAIS EM UM MESMO QUADRANTE!")
+			print("JOGADA INVALIDA!")
+			loop = 0 #APENAS PARA FINS DE TESTE!
