@@ -30,8 +30,6 @@ sudoku = [linha0,linha1,linha2,linha3,linha4,linha5,linha6,linha7,linha8]
 #Dicionário para letras das colunas
 dic = {"A":0,"B":1,"C":2,"D":3,"E":4,"F":5,"G":6,"H":7,"I":8,"a":0,"b":1,"c":2,"d":3,"e":4,"f":5,"g":6,"h":7,"i":8,}
 
-#caracts = ["A","B","C","D","E","F","G","H","I","a","b","c","d","e","f","g","h","i"] #lista com caracteres aceitáveis
-
 def testelin(numero, linha): #função para testar se há números iguais na linha
 	validade = True
 	contador = 0
@@ -104,18 +102,36 @@ while contador < len(dicas)-1:
 
 if not erro:
 	contador = 0
-	for contador in range(0, len(jogadas)-1):
+	for contador in range(0, len(jogadas)-1): #percorre todas as jogadas da lista de jogadas
 		coluna = int(dic[jogadas[contador][0]])
 		linha = int(jogadas[contador][2])-1
 		numero = int(jogadas[contador][4]) #formata valores da jogada para matriz sudoku		
-		contador2 = 0
-		distintodica = True
+		contador2 = 0 #variável para percorrer a lista de pistas
+		distintodica = True #variável para testar se jogada tenta sobreescrever uma pista
 		while contador2 < len(dicas)-1 and distintodica:
 			if coluna==int(dicas[contador2][0]) and linha==int(dicas[contador2][2])-1:
 				print("A jogada ("+str(jogadas[contador][0])+","+str(jogadas[contador][2])+") = "+str(numero)+" eh invalida!")
 				distintodica = False
 			contador2 = contador2 + 1
 
+		if distintodica:
+			jogadaante = sudoku[linha][coluna] #salva valor anterior da matriz
+			sudoku[linha][coluna] = int(jogadas[contador][4]) #insere jogada na matriz para uso das funções
+			if not testelin(numero, linha) or not testecol(numero, coluna) or not testequad():
+				sudoku[linha][coluna] = jogadaante
+				print("A jogada ("+str(jogadas[contador][0])+","+str(jogadas[contador][2])+") = "+str(numero)+" eh invalida!")
+	contlinha = 0 #contadores
+	contcoluna = 0
+	gg = 0 #variável para testar se jogo está completo
+	while contlinha<9 and sudoku[contlinha][contcoluna] != ' ': #verifica se ainda já jogadas não preenchidas
+		while contcoluna<9 and sudoku[i][j] != ' ':
+			gg = gg + 1
+			contcoluna = contcoluna + 1
+		contlinha = contlinha + 1
+		contcoluna = 0	
+	if gg == 81:
+		print("A grade foi preenchida com sucesso!")
 
-
+	else:
+		print("A grade nao foi preenchida!")
 
