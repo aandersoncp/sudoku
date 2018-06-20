@@ -115,16 +115,6 @@ while loop != 0:
 	gg = 0 #numero de jogadas preenchidas
 	delecao = 0 
 	comand = 0 #variáveis utilizadas para verificar ação de deleção e de info/sair, e evitar que outras ações sejam tomadas
-	while i<9 and sudoku[i][j] != ' ': #verifica se ainda já jogadas não preenchidas
-		while j<9 and sudoku[i][j] != ' ':
-			gg = gg + 1
-			j = j + 1
-		i = i + 1
-		j = 0	
-	if gg > 80:
-		print("PARABENS, VOCE COMPLETOU O SUDOKU!")
-		loop = 0
-
 	if verdicas == 0:
 		#verificação da validade das dicas
 		if len(dicas)-1>80 or not testequad():
@@ -142,7 +132,21 @@ while loop != 0:
 		if valido==0:
 			print("JOGO INVALIDO! CONFIGURE AS PISTAS CORRETAMENTE! \n(SUG: USE O COMANDO 'nano PistasConfig.txt')")
 			loop = 0
+	
 
+	if valido == 1:
+		i = 0 #contadores
+		j = 0
+		gg = 0 #numero de jogadas preenchidas
+		while i<9 and sudoku[i][j] != ' ': #verifica se ainda já jogadas não preenchidas
+			while j<9 and sudoku[i][j] != ' ':
+				gg = gg + 1
+				j = j + 1
+			i = i + 1
+			j = 0	
+		if gg > 80:
+			print("PARABENS, VOCE COMPLETOU O SUDOKU!")
+			loop = 0
 
 	if loop!=0:
 		jogada = input("DIGITE SUA JOGADA:")
@@ -150,8 +154,11 @@ while loop != 0:
 		jogada = "".join(jogada)
 		v = jogada.find(',')
 		p = jogada.find(':')
-		vc = False #valicação da letra da jogada
+		vc = False #valicação do caractere da jogada
 		contador = 0
+		if not jogada:
+			vc = True
+			valido2 = 0
 		while not vc and contador < 18: #testa se coluna tem caractere permitido
 			if jogada[0] == caracts[contador]:
 				vc = True
@@ -181,7 +188,7 @@ while loop != 0:
 					vl = True
 				contador = contador + 1
 			if not vc or not vl or jogada[2] != ',': #testa se é uma jogada de deleção no formato correto
-				print("FORMATO DE JOGADA DE DELECAO NAO COMPREENDIDO!")
+				print("FORMATO DE JOGADA NAO COMPREENDIDO!")
 				valido2 = 0
 			else:
 				vd = False #variável para verificação de dica
@@ -191,7 +198,7 @@ while loop != 0:
 						vd = True
 					contador = contador + 1
 				if vd:
-					print("DICAS NAO PODEM SER DELETADAS!")
+					print("PISTAS NAO PODEM SER DELETADAS!")
 					valido2 = 0
 				else: #deletando a jogada
 					l = int(jogada[3]) - 1
@@ -215,7 +222,7 @@ while loop != 0:
 					valido2 = 0
 			for k in range (0, len(dicas)-1):#verifica se a jogada tenta sobrescrever uma dica
 				if coluna==int(dicas[k][0]) and linha==int(dicas[k][2])-1:
-					print("DICAS NAO PODEM SER ALTERADAS!")
+					print("PISTAS NAO PODEM SER ALTERADAS!")
 					valido2 = 0
 			
 			if not testequad():

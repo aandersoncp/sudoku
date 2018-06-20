@@ -89,16 +89,22 @@ def testequad(): #função para teste de numeros iguais em um mesmo quadrante
 #Trocar letra da coluna pelo número e insere pistas na matriz sudoku
 contador = 0
 erro = False #variável para verificar se dicas foram testasdas e evitar outras ações do programa
-while contador < len(dicas)-1:
-	dicas[contador] = dicas[contador].replace(str(dicas[contador][0]), str(dic[dicas[contador][0]]))
-	j = int(dicas[contador][0]) #coluna da matriz sudoku
-	i = int(dicas[contador][2])-1 #linha da matriz sudoku
-	sudoku[i][j] = int(dicas[contador][4])
-	contador = contador + 1
-	if not testelin(sudoku[i][j], i) or not testecol(sudoku[i][j], j):
-		print("Erro de configuracao de pistas!") 
-		contador = len(dicas)
-		erro = True
+
+if len(dicas) > 80: #testa se há mais de 80 dicas
+	print("Configuracao de dicas invalida.") 
+	erro = True
+
+else:
+	while contador < len(dicas)-1:
+		dicas[contador] = dicas[contador].replace(str(dicas[contador][0]), str(dic[dicas[contador][0]]))
+		j = int(dicas[contador][0]) #coluna da matriz sudoku
+		i = int(dicas[contador][2])-1 #linha da matriz sudoku
+		sudoku[i][j] = int(dicas[contador][4])
+		contador = contador + 1
+		if not testelin(sudoku[i][j], i) or not testecol(sudoku[i][j], j):
+			print("Configuracao de dicas invalida.") 
+			contador = len(dicas)
+			erro = True
 
 if not erro:
 	contador = 0
@@ -124,7 +130,7 @@ if not erro:
 	contcoluna = 0
 	gg = 0 #variável para testar se jogo está completo
 	while contlinha<9 and sudoku[contlinha][contcoluna] != ' ': #verifica se ainda já jogadas não preenchidas
-		while contcoluna<9 and sudoku[i][j] != ' ':
+		while contcoluna<9 and sudoku[contlinha][contcoluna] != ' ':
 			gg = gg + 1
 			contcoluna = contcoluna + 1
 		contlinha = contlinha + 1
