@@ -1,8 +1,9 @@
 '''
-TRABALHO FINAL - SUDOKU
-ANTONIO ANDERSON COSTA PEREIRA - 422029
-EDUARDO ALCANTARA DE ALENCAR PINTO - 428945
-GUSTAVO SANTOS MARQUES DE FREITAS - 414665
+SUDOKU INTERATIVO PARA TERMINAL PYTHON 3
+CRIADO POR:
+ANTONIO ANDERSON 
+EDUARDO ALCANTARA
+GUSTAVO MARQUES
 '''
 
 #Abrindo e configurando arquivo com dicas
@@ -22,6 +23,13 @@ linha7 = 9*[' ']
 linha8 = 9*[' ']
 sudoku = [linha0,linha1,linha2,linha3,linha4,linha5,linha6,linha7,linha8]
 
+#cores a serem usadas no terminal
+vermelho = "\033[0;31m"
+azul = "\033[0;34m"
+ciano = "\033[1;36m"
+verde = "\033[0;32m"
+nulo = "\033[m"
+
 #Dicionário para letras das colunas
 dic = {"A":0,"B":1,"C":2,"D":3,"E":4,"F":5,"G":6,"H":7,"I":8,"a":0,"b":1,"c":2,"d":3,"e":4,"f":5,"g":6,"h":7,"i":8,}
 
@@ -34,31 +42,42 @@ while contador < len(dicas)-1:
 	sudoku[i][j] = int(dicas[contador][4])
 	contador = contador + 1
 
-#Função para exibir status do sudoku
-def layout():
+def scr (numero, linha, coluna): #função para selecionar cor de cada bloco do layout
+	i = 0
+	teste = False
+	while i < len(dicas) - 1 and not teste:
+		if int(dicas[i][0]) == coluna and int(dicas[i][2])-1 == linha and str(dicas[i][4]) == str(numero):
+			teste = True
+		i = i + 1
+	if teste:
+		return str(numero)
+	else:
+		return ciano+str(numero)+azul
+
+
+def layout(): #Procedimento para mostrar status da matriz sudoku
 	print('\n')
 	print("     A   B   C    D   E   F    G   H   I")
-	print("  ++---+---+---++---+---+---++---+---+---++")
-	print("1 || \033[0;31m"+str(sudoku[0][0])+" | "+str(sudoku[0][1])+" | "+str(sudoku[0][2])+"\033[m ||\033[0;34m "+str(sudoku[0][3])+" | "+str(sudoku[0][4])+" | "+str(sudoku[0][5])+"\033[m ||\033[0;31m "+str(sudoku[0][6])+" | "+str(sudoku[0][7])+" | "+str(sudoku[0][8])+"\033[m ||")
-	print("  ++---+---+---++---+---+---++---+---+---++")
-	print("2 || \033[0;31m"+str(sudoku[1][0])+" | "+str(sudoku[1][1])+" | "+str(sudoku[1][2])+"\033[m ||\033[0;34m "+str(sudoku[1][3])+" | "+str(sudoku[1][4])+" | "+str(sudoku[1][5])+"\033[m ||\033[0;31m "+str(sudoku[1][6])+" | "+str(sudoku[1][7])+" | "+str(sudoku[1][8])+"\033[m ||")
-	print("  ++---+---+---++---+---+---++---+---+---++")
-	print("3 || \033[0;31m"+str(sudoku[2][0])+" | "+str(sudoku[2][1])+" | "+str(sudoku[2][2])+"\033[m ||\033[0;34m "+str(sudoku[2][3])+" | "+str(sudoku[2][4])+" | "+str(sudoku[2][5])+"\033[m ||\033[0;31m "+str(sudoku[2][6])+" | "+str(sudoku[2][7])+" | "+str(sudoku[2][8])+"\033[m ||")
-	print("  ++===+===+===++===+===+===++===+===+===++")
-	print("4 ||\033[0;34m "+str(sudoku[3][0])+" | "+str(sudoku[3][1])+" | "+str(sudoku[3][2])+"\033[m ||\033[0;31m "+str(sudoku[3][3])+" | "+str(sudoku[3][4])+" | "+str(sudoku[3][5])+"\033[m ||\033[0;34m "+str(sudoku[3][6])+" | "+str(sudoku[3][7])+" | "+str(sudoku[3][8])+"\033[m ||")
-	print("  ++---+---+---++---+---+---++---+---+---++")
-	print("5 ||\033[0;34m "+str(sudoku[4][0])+" | "+str(sudoku[4][1])+" | "+str(sudoku[4][2])+"\033[m ||\033[0;31m "+str(sudoku[4][3])+" | "+str(sudoku[4][4])+" | "+str(sudoku[4][5])+"\033[m ||\033[0;34m "+str(sudoku[4][6])+" | "+str(sudoku[4][7])+" | "+str(sudoku[4][8])+"\033[m ||")
-	print("  ++---+---+---++---+---+---++---+---+---++")
-	print("6 ||\033[0;34m "+str(sudoku[5][0])+" | "+str(sudoku[5][1])+" | "+str(sudoku[5][2])+"\033[m ||\033[0;31m "+str(sudoku[5][3])+" | "+str(sudoku[5][4])+" | "+str(sudoku[5][5])+"\033[m ||\033[0;34m "+str(sudoku[5][6])+" | "+str(sudoku[5][7])+" | "+str(sudoku[5][8])+"\033[m ||")
-	print("  ++===+===+===++===+===+===++===+===+===++")
-	print("7 ||\033[0;31m "+str(sudoku[6][0])+" | "+str(sudoku[6][1])+" | "+str(sudoku[6][2])+"\033[m ||\033[0;34m "+str(sudoku[6][3])+" | "+str(sudoku[6][4])+" | "+str(sudoku[6][5])+"\033[m ||\033[0;31m "+str(sudoku[6][6])+" | "+str(sudoku[6][7])+" | "+str(sudoku[6][8])+"\033[m ||")
-	print("  ++---+---+---++---+---+---++---+---+---++")
-	print("8 ||\033[0;31m "+str(sudoku[7][0])+" | "+str(sudoku[7][1])+" | "+str(sudoku[7][2])+"\033[m ||\033[0;34m "+str(sudoku[7][3])+" | "+str(sudoku[7][4])+" | "+str(sudoku[7][5])+"\033[m ||\033[0;31m "+str(sudoku[7][6])+" | "+str(sudoku[7][7])+" | "+str(sudoku[7][8])+"\033[m ||")
-	print("  ++---+---+---++---+---+---++---+---+---++")
-	print("9 ||\033[0;31m "+str(sudoku[8][0])+" | "+str(sudoku[8][1])+" | "+str(sudoku[8][2])+"\033[m ||\033[0;34m "+str(sudoku[8][3])+" | "+str(sudoku[8][4])+" | "+str(sudoku[8][5])+"\033[m ||\033[0;31m "+str(sudoku[8][6])+" | "+str(sudoku[8][7])+" | "+str(sudoku[8][8])+"\033[m ||")
-	print("  ++---+---+---++---+---+---++---+---+---++")
+	print(azul+"  ++---+---+---++---+---+---++---+---+---++"+nulo)
+	print("1 "+azul+"|| "+scr(sudoku[0][0], 0, 0)+" | "+scr(sudoku[0][1], 0, 1)+" | "+scr(sudoku[0][2], 0, 2)+" || "+scr(sudoku[0][3], 0, 3)+" | "+scr(sudoku[0][4], 0, 4)+" | "+scr(sudoku[0][5], 0, 5)+" || "+scr(sudoku[0][6], 0, 6)+" | "+scr(sudoku[0][7], 0, 7)+" | "+scr(sudoku[0][8], 0, 8)+" ||"+nulo)
+	print(azul+"  ++---+---+---++---+---+---++---+---+---++"+nulo)
+	print("2 "+azul+"|| "+scr(sudoku[1][0], 1, 0)+" | "+scr(sudoku[1][1], 1, 1)+" | "+scr(sudoku[1][2], 1, 2)+" || "+scr(sudoku[1][3], 1, 3)+" | "+scr(sudoku[1][4], 1, 4)+" | "+scr(sudoku[1][5], 1, 5)+" || "+scr(sudoku[1][6], 1, 6)+" | "+scr(sudoku[1][7], 1, 7)+" | "+scr(sudoku[1][8], 1, 8)+" ||"+nulo)
+	print(azul+"  ++---+---+---++---+---+---++---+---+---++"+nulo)
+	print("3 "+azul+"|| "+scr(sudoku[2][0], 2, 0)+" | "+scr(sudoku[2][1], 2, 1)+" | "+scr(sudoku[2][2], 2, 2)+" || "+scr(sudoku[2][3], 2, 3)+" | "+scr(sudoku[2][4], 2, 4)+" | "+scr(sudoku[2][5], 2, 5)+" || "+scr(sudoku[2][6], 2, 6)+" | "+scr(sudoku[2][7], 2, 7)+" | "+scr(sudoku[2][8], 2, 8)+" ||"+nulo)
+	print(azul+"  ++===+===+===++===+===+===++===+===+===++"+nulo)
+	print("4 "+azul+"|| "+scr(sudoku[3][0], 3, 0)+" | "+scr(sudoku[3][1], 3, 1)+" | "+scr(sudoku[3][2], 3, 2)+" || "+scr(sudoku[3][3], 3, 3)+" | "+scr(sudoku[3][4], 3, 4)+" | "+scr(sudoku[3][5], 3, 5)+" || "+scr(sudoku[3][6], 3, 6)+" | "+scr(sudoku[3][7], 3, 7)+" | "+scr(sudoku[3][8], 3, 8)+" ||"+nulo)
+	print(azul+"  ++---+---+---++---+---+---++---+---+---++"+nulo)
+	print("5 "+azul+"|| "+scr(sudoku[4][0], 4, 0)+" | "+scr(sudoku[4][1], 4, 1)+" | "+scr(sudoku[4][2], 4, 2)+" || "+scr(sudoku[4][3], 4, 3)+" | "+scr(sudoku[4][4], 4, 4)+" | "+scr(sudoku[4][5], 4, 5)+" || "+scr(sudoku[4][6], 4, 6)+" | "+scr(sudoku[4][7], 4, 7)+" | "+scr(sudoku[4][8], 4, 8)+" ||"+nulo)
+	print(azul+"  ++---+---+---++---+---+---++---+---+---++"+nulo)
+	print("6 "+azul+"|| "+scr(sudoku[5][0], 5, 0)+" | "+scr(sudoku[5][1], 5, 1)+" | "+scr(sudoku[5][2], 5, 2)+" || "+scr(sudoku[5][3], 5, 3)+" | "+scr(sudoku[5][4], 5, 4)+" | "+scr(sudoku[5][5], 5, 5)+" || "+scr(sudoku[5][6], 5, 6)+" | "+scr(sudoku[5][7], 5, 7)+" | "+scr(sudoku[5][8], 5, 8)+" ||"+nulo)
+	print(azul+"  ++===+===+===++===+===+===++===+===+===++"+nulo)
+	print("7 "+azul+"|| "+scr(sudoku[6][0], 6, 0)+" | "+scr(sudoku[6][1], 6, 1)+" | "+scr(sudoku[6][2], 6, 2)+" || "+scr(sudoku[6][3], 6, 3)+" | "+scr(sudoku[6][4], 6, 4)+" | "+scr(sudoku[6][5], 6, 5)+" || "+scr(sudoku[6][6], 6, 6)+" | "+scr(sudoku[6][7], 6, 7)+" | "+scr(sudoku[6][8], 6, 8)+" ||"+nulo)
+	print(azul+"  ++---+---+---++---+---+---++---+---+---++"+nulo)
+	print("8 "+azul+"|| "+scr(sudoku[7][0], 7, 0)+" | "+scr(sudoku[7][1], 7, 1)+" | "+scr(sudoku[7][2], 7, 2)+" || "+scr(sudoku[7][3], 7, 3)+" | "+scr(sudoku[7][4], 7, 4)+" | "+scr(sudoku[7][5], 7, 5)+" || "+scr(sudoku[7][6], 7, 6)+" | "+scr(sudoku[7][7], 7, 7)+" | "+scr(sudoku[7][8], 7, 8)+" ||"+nulo)
+	print(azul+"  ++---+---+---++---+---+---++---+---+---++"+nulo)
+	print("9 "+azul+"|| "+scr(sudoku[8][0], 8, 0)+" | "+scr(sudoku[8][1], 8, 1)+" | "+scr(sudoku[8][2], 8, 2)+" || "+scr(sudoku[8][3], 8, 3)+" | "+scr(sudoku[8][4], 8, 4)+" | "+scr(sudoku[8][5], 8, 5)+" || "+scr(sudoku[8][6], 8, 6)+" | "+scr(sudoku[8][7], 8, 7)+" | "+scr(sudoku[8][8], 8, 8)+" ||"+nulo)
+	print(azul+"  ++---+---+---++---+---+---++---+---+---++"+nulo)
 	print('\n')
-
 
 def testequad(): #função para teste de numeros iguais em um mesmo quadrante
 	#separação da matriz sudoku em quadrantes
@@ -121,11 +140,14 @@ while loop != 0:
 			valido = 0
 		elif valido==1:
 			for i in range(len(dicas)-1):
-				for j in range(i+1,len(dicas)-1):
-					if dicas[i][4] == dicas[j][4]:
-						if (dicas[i][0] == dicas[j][0] and dicas[i][2] != dicas[j][2]) or (dicas[i][0] != dicas[j][0] and dicas[i][2] == dicas[j][2]):
-							valido = 0
-							print("AS PISTAS NAO SEGUEM AS REGRAS DO JOGO!")
+				if int(dicas[i][4]) == 0: #verifica se o valor 0 está sendo usado na pista
+					valido = 0
+				else:
+					for j in range(i+1,len(dicas)-1):
+						if dicas[i][4] == dicas[j][4]:
+							if (dicas[i][0] == dicas[j][0] and dicas[i][2] != dicas[j][2]) or (dicas[i][0] != dicas[j][0] and dicas[i][2] == dicas[j][2]): #verifica (com "ou exclusivo", para ignorar pistas repetidas) validade das pistas nas linhas e colunas
+								valido = 0
+								print("AS PISTAS NAO SEGUEM AS REGRAS DO JOGO!")
 		else:
 			verdicas = 1
 		
@@ -145,7 +167,7 @@ while loop != 0:
 			i = i + 1
 			j = 0	
 		if gg > 80:
-			print("PARABENS, VOCE COMPLETOU O SUDOKU!")
+			print(verde+"PARABENS, VOCE COMPLETOU O SUDOKU!"+nulo)
 			loop = 0
 
 	if loop!=0:
@@ -163,16 +185,13 @@ while loop != 0:
 			if jogada[0] == caracts[contador]:
 				vc = True
 			contador = contador + 1
-		if jogada == 'X':
-			print("JOGO ENCERRADO!")
+		if jogada == 'X': #testa se é entrada de comando para encerrar o jogo
+			print(verde+"JOGO ENCERRADO!"+nulo)
 			loop = 0
 			comand = 1
-		elif jogada == 'INFO':
+		elif jogada == 'INFO': #teste se é entrada de comando de informação
 			info ()
 			comand = 1
-		elif (len(jogada) != 5 or v !=1 or p !=3 or int(jogada[2]) == 0 or int(jogada[4]) == 0 or not vc) and len(jogada)!=4:
-			print("FORMATO DA JOGADA NAO COMPREENDIDO!")
-			valido2 = 0
 		
 		elif len(jogada)==4 and (jogada[0]=="D" or jogada[0]=="d"): #testa se é uma jogada de deleção
 			vc = False #valicação da letra da jogada (coluna)
@@ -188,7 +207,7 @@ while loop != 0:
 					vl = True
 				contador = contador + 1
 			if not vc or not vl or jogada[2] != ',': #testa se é uma jogada de deleção no formato correto
-				print("FORMATO DE JOGADA NAO COMPREENDIDO!")
+				print(vermelho+"FORMATO DE JOGADA NAO COMPREENDIDO!"+nulo)
 				valido2 = 0
 			else:
 				vd = False #variável para verificação de dica
@@ -198,47 +217,58 @@ while loop != 0:
 						vd = True
 					contador = contador + 1
 				if vd:
-					print("PISTAS NAO PODEM SER DELETADAS!")
+					print(vermelho+"PISTAS NAO PODEM SER DELETADAS!"+nulo)
 					valido2 = 0
 				else: #deletando a jogada
 					l = int(jogada[3]) - 1
 					c = int(dic[jogada[1]])
-					sudoku[l][c] = ' '
-					print('\n'*130)
-					layout()
-					print("JOGADA DELETADA!")
-					delecao = 1 #variável para impedir outras ações do programa
+					if str(sudoku[l][c]) == ' ':
+						print('\n'*130)
+						layout()
+						print(vermelho+"NAO HA VALOR A SER DELETADO!"+nulo)
+						delecao = 1 #variável para impedir outras ações do programa sejam acionadas
+					else:
+						sudoku[l][c] = ' '
+						print('\n'*130)
+						layout()
+						print(verde+"JOGADA DELETADA!"+nulo)
+						delecao = 1 #variável para impedir outras ações do programa sejam acionadas
+
+		elif (len(jogada) != 5 or v !=1 or p !=3 or int(jogada[2]) == 0 or int(jogada[4]) == 0 or not vc): #testa outra possibilidade de invalidação de entrada
+			print("FORMATO DA JOGADA NAO COMPREENDIDO!")
+			valido2 = 0
+
 		else:
 			coluna = int(dic[jogada[0]])
 			linha = int(jogada[2])-1
 			numero = int(jogada[4]) #formata valores da jogada para matriz sudoku
 			for j in range(0,9): #verifica se há numero igual a jogada na linha
 				if numero == sudoku[linha][j]:
-					print("VALOR JA EXISTENTE NA LINHA!")
+					print(vermelho+"VALOR JA EXISTENTE NA LINHA!"+nulo)
 					valido2 = 0
 			for i in range(0,9):#verifica se há numero igual a jogada na coluna
 				if numero == sudoku[i][coluna]: 
-					print("VALOR JA EXISTENTE NA COLUNA!")
+					print(vermelho+"VALOR JA EXISTENTE NA COLUNA!"+nulo)
 					valido2 = 0
 			for k in range (0, len(dicas)-1):#verifica se a jogada tenta sobrescrever uma dica
 				if coluna==int(dicas[k][0]) and linha==int(dicas[k][2])-1:
-					print("PISTAS NAO PODEM SER ALTERADAS!")
+					print(vermelho+"PISTAS NAO PODEM SER ALTERADAS!"+nulo)
 					valido2 = 0
 			
 			if not testequad():
 				valido2 = 0
 	
 		if valido2 == 0:
-			print("JOGADA INVALIDA!")
-		elif valido2 == 1 and delecao == 0 and comand == 0:
+			print(vermelho+"JOGADA INVALIDA!"+nulo)
+		elif valido2 == 1 and delecao == 0 and comand == 0: #salva valor anterior da matriz e sobreescreve a jogada para teste de quadrante
 			numeroant = sudoku[linha][coluna]
 			sudoku[linha][coluna] = numero
 			print('\n'*130)
 			layout()
-		if not testequad() and delecao == 0 and comand == 0:
+		if not testequad() and delecao == 0 and comand == 0: #testa se há valore iguais no mesmo quadrante
 			sudoku[linha][coluna] = numeroant
 			print('\n'*130)
 			layout()
-			print("HA VALORES IGUAIS EM UM MESMO QUADRANTE!")
-			print("JOGADA INVALIDA!")
+			print(+vermelho+"HA VALORES IGUAIS EM UM MESMO QUADRANTE!"+nulo)
+			print(vermelho+"JOGADA INVALIDA!"+nulo)
 

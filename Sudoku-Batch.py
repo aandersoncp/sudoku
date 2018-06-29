@@ -1,8 +1,9 @@
 '''
-TRABALHO FINAL - SUDOKU
-ANTONIO ANDERSON COSTA PEREIRA - 422029
-EDUARDO ALCANTARA DE ALENCAR PINTO - 428945
-GUSTAVO SANTOS MARQUES DE FREITAS - 414665
+SUDOKU INTERATIVO PARA TERMINAL PYTHON 3
+CRIADO POR:
+ANTONIO ANDERSON 
+EDUARDO ALCANTARA
+GUSTAVO MARQUES
 '''
 
 #Abrindo e configurando arquivo com dicas
@@ -100,11 +101,16 @@ else:
 		j = int(dicas[contador][0]) #coluna da matriz sudoku
 		i = int(dicas[contador][2])-1 #linha da matriz sudoku
 		sudoku[i][j] = int(dicas[contador][4])
-		contador = contador + 1
-		if not testelin(sudoku[i][j], i) or not testecol(sudoku[i][j], j):
+		if int(dicas[contador][4]) == 0: #verifica se há o valor zero entre as pistas 
 			print("Configuracao de dicas invalida.") 
 			contador = len(dicas)
 			erro = True
+		else:
+			if not testelin(sudoku[i][j], i) or not testecol(sudoku[i][j], j): #insere as pistas na matriz e testa linha e coluna
+				print("Configuracao de dicas invalida.") 
+				contador = len(dicas)
+				erro = True
+		contador = contador + 1
 
 if not erro:
 	contador = 0
@@ -123,7 +129,7 @@ if not erro:
 		if distintodica:
 			jogadaante = sudoku[linha][coluna] #salva valor anterior da matriz
 			sudoku[linha][coluna] = int(jogadas[contador][4]) #insere jogada na matriz para uso das funções
-			if not testelin(numero, linha) or not testecol(numero, coluna) or not testequad():
+			if int(jogadas[contador][4]) == 0 or not testelin(numero, linha) or not testecol(numero, coluna) or not testequad(): #teste se o valor da jogada é zero, se há mesmo valor na linha, coluna ou quadrante
 				sudoku[linha][coluna] = jogadaante
 				print("A jogada ("+str(jogadas[contador][0])+","+str(jogadas[contador][2])+") = "+str(numero)+" eh invalida!")
 	contlinha = 0 #contadores
