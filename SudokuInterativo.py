@@ -158,39 +158,39 @@ try:
 		jogada = jogada.upper()
 		v = jogada.find(',') #localiza vírgula e dois pontos do formato de jogada
 		p = jogada.find(':')
-		vc = False #valicação do caractere da jogada
+		vc = False #valicação do caracteres da jogada
 		contador = 0
+				
+		if jogada == 'SAIR': #testa se é entrada de comando para encerrar o jogo
+			print(verde+"JOGO ENCERRADO!"+nulo)
+			break
+
+		if jogada == 'INFO': #teste se é entrada de comando de informação
+			print(azul+"FORMATO DE JOGADA: '<COL>,<LIN>: <NUMERO>'")
+			print("COMANDO PARA DELETAR UMA JOGADA: 'D<COL>,<LIN>'")
+			print("ENTRE 'SAIR' PARA ENCERRAR O JOGO."+nulo)
+			comand = True
 
 		if not jogada: #caso em que a entrada da jogada é falsa (vazia)
 			vc = True
 			validoj = False
 
-		elif jogada[0] in dic: #testa se coluna tem caractere permitido
+		if jogada[0] in dic: #testa se coluna tem caractere permitido
 			vc = True
-				
-		elif jogada == 'SAIR': #testa se é entrada de comando para encerrar o jogo
-			print(verde+"JOGO ENCERRADO!"+nulo)
-			break
-
-		elif jogada == 'INFO': #teste se é entrada de comando de informação
-			print(azul+"FORMATO DE JOGADA: '<COL>,<LIN>: <NUMERO>'")
-			print("COMANDO PARA DELETAR UMA JOGADA: 'D<COL>,<LIN>'")
-			print("ENTRE 'SAIR' PARA ENCERRAR O JOGO."+nulo)
-			comand = True
 			
-		elif len(jogada)==4 and jogada[0]=="D": #testa se é uma jogada de deleção
-			vc = False #valicação da letra da jogada (coluna)
+		if len(jogada)==4 and jogada[0]=="D": #testa se é uma jogada de deleção
+			vco = False #valicação da letra da jogada (coluna)
 			vl = False #valicação do numero da jogada (linha)
 			if jogada[1] in dic: #testa se coluna tem caractere permitido
-				vc = True
+				vco = True
 			
 			try: #evita erro caso valor da linha não seja numerico
-				if int(jogada[3]) > 0 and int(jogada[3]) < 9: #verifica se linha tem caractere permite
+				if int(jogada[3]) > 0 and int(jogada[3]) < 10: #verifica se linha tem caractere permite
 					vl = True
 			except:
 				vl = False
 
-			if not vc or not vl or jogada[2] != ',': #caso em que jogada de deleção é inválida
+			if not vco or not vl or jogada[2] != ',': #caso em que jogada de deleção é inválida
 				print(vermelho+"FORMATO DE JOGADA NAO COMPREENDIDO! TENTE NOVAMENTE."+nulo)
 				validoj = False
 
@@ -222,8 +222,8 @@ try:
 						layout()
 						print(verde+"JOGADA DELETADA!"+nulo)
 						delecao = True #variável para impedir outras ações do programa sejam acionadas
-
-		elif (len(jogada) != 5 or v !=1 or p !=3 or str(jogada[2]) == '0' or str(jogada[4]) == '0' or not vc): #testa outra possibilidade de invalidação de entrada
+				
+		if not delecao and not comand and (len(jogada) != 5 or v !=1 or p !=3 or str(jogada[2]) == '0' or str(jogada[4]) == '0' or not vc): #testa outra possibilidade de invalidação de entrada
 			print(vermelho+"FORMATO DA JOGADA NAO COMPREENDIDO!"+nulo)
 			validoj = False
 
@@ -252,7 +252,7 @@ try:
 			except: #caso em que valores não podem ser convertidos em inteiro
 				validoj = False
 		
-			if not validoj: #caso em que a jogada não segue formatação
+			if not validoj and not delecao and not comand: #caso em que a jogada não segue formatação
 				print(vermelho+"JOGADA INVALIDA!"+nulo)
 
 			#salvando valor anterior da matriz e sobreescreve a jogada para teste de quadrante
@@ -266,7 +266,7 @@ try:
 				sudoku[linha][coluna] = numeroant
 				print('\n'*130)
 				layout()
-				print(+vermelho+"HA VALORES IGUAIS EM UM MESMO QUADRANTE!"+nulo)
+				print(vermelho+"HA VALORES IGUAIS EM UM MESMO QUADRANTE!"+nulo)
 				print(vermelho+"JOGADA INVALIDA!"+nulo)
 
 except:
